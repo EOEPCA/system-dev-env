@@ -1,0 +1,6 @@
+# from galaxy
+- src: geerlingguy.git
+- src: reallyenglish.git
+- src: mongrelion.docker
+- src: andrewrothstein.jq
+- src: gantsign.kubernetes
