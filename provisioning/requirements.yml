@@ -4,3 +4,7 @@
 - src: mongrelion.docker
 - src: andrewrothstein.jq
 - src: gantsign.kubernetes
+- src: darkwizard242.pip
+- src: geerlingguy.pip
+- src: andrewrothstein.terraform
+- src: ypsman.resolv
