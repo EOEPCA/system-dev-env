@@ -1,21 +1,58 @@
 ---
-  - name: EOEPCA local development environment
-    hosts: all
-    become: yes
+- name: EOEPCA development environment for deploying local, staging and production environments
+  hosts: all
+  become: yes
 
-    roles:
-    - geerlingguy.git
-    - reallyenglish.git
-    - mongrelion.docker
-    - andrewrothstein.jq
-    - gantsign.kubernetes
-
-    vars:  
-      docker_version: "18.06"  
-      docker_config:
-        live-restore: true
-        userland-proxy: false  
-      kubernetes_node_type: admin
-      git_additional_packages:
-        - "{% if ansible_os_family == 'FreeBSD' %}gitflow{% elif ansible_os_family == 'OpenBSD' %}git-cvs{% elif ansible_os_family == 'RedHat' %}git-cvs{% else %}git-flow{% endif %}"
+  vars:  
+    docker_version: "18.06"  
+    docker_config:
+      live-restore: true
+      userland-proxy: false  
+    kubernetes_node_type: admin
+    git_additional_packages:
+      - "{% if ansible_os_family == 'FreeBSD' %}gitflow{% elif ansible_os_family == 'OpenBSD' %}git-cvs{% elif ansible_os_family == 'RedHat' %}git-cvs{% else %}git-flow{% endif %}"
+    pip_app_package: python3-pip
+    pip_desired_state: present
+    pip_executable: pip3
+    pip_install_packages:
+    - name: ansible
+    - name: jinja2
+      version: "2.10.1"
+    - name: netaddr
+      version: "0.7.19"
+    - name: pbr
+      version: "5.2.0"
+    - name: hvac
+      version: "0.8.2"
+    - name: jmespath
+      version: "0.9.4"
+    - name: ruamel.yaml
+      version: "0.15.96"
+    - name: python-openstackclient
+    ssh_key_filename: id_rsa
   
+  roles:
+    # For configuration management
+    - geerlingguy.git 
+    - reallyenglish.git
+    # For local test environment development
+    - mongrelion.docker
+    - gantsign.kubernetes
+    # For staging and production environment deployment 
+    - darkwizard242.pip
+    - geerlingguy.pip
+    - andrewrothstein.terraform
+    # For acceptance testing
+    - andrewrothstein.jq 
+    # DNS resolution
+    - role: ypsman.resolv
+      resolv_dns_server:
+      - 8.8.8.8
+      - 8.8.4.4
+  
+  post_tasks:
+    - name: SSH KeyGen command
+      become_user: "vagrant"
+      shell: > 
+        ssh-keygen -q -b 2048 -t rsa -N "" -C "creating SSH" -f ~/.ssh/id_rsa
+        creates="~/.ssh/id_rsa"
