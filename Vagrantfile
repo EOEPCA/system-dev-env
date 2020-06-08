@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "geerlingguy/ubuntu1604"
+  config.vm.box = "geerlingguy/ubuntu1804"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -45,15 +45,12 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
   config.vm.synced_folder ".", "/vagrant"
 
-  config.vm.provider "virtualbox" do |v|
-    v.memory = 2048
-    v.cpus = 2
-  end
-
   # View the documentation for the provider you are using for more
   # information on available options.
 
   config.vm.provision :ansible_local do |ansible|
+    ansible.install = true
+    ansible.version = "latest"
     ansible.playbook = "provisioning/playbook.yml"
     ansible.galaxy_role_file = "provisioning/requirements.yml"
     ansible.galaxy_roles_path = "/etc/ansible/roles"
@@ -66,7 +63,8 @@ Vagrant.configure("2") do |config|
 	  # Display the VirtualBox GUI when booting the machine
 	  vb.gui = true
 	  # Customize the amount of memory on the VM:
-	  vb.memory = "1024"
+    vb.memory = "2048"
+    vb.cpus = 2
 	end
 	
 	# Install xfce and virtualbox additions
