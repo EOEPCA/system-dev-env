@@ -56,26 +56,29 @@ Vagrant.configure("2") do |config|
     ansible.galaxy_roles_path = "/etc/ansible/roles"
     ansible.galaxy_command = "sudo ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
   end
+
+  # Customize the amount of memory on the VM:
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "2048"
+    vb.cpus = 2
+  end
   
   # Section for Graphical Desktop 
   if ENV['DEV_DESKTOP']
     config.vm.provider "virtualbox" do |vb|
-	  # Display the VirtualBox GUI when booting the machine
-	  vb.gui = true
-	  # Customize the amount of memory on the VM:
-    vb.memory = "2048"
-    vb.cpus = 2
-	end
-	
-	# Install xfce and virtualbox additions
-	config.vm.provision "shell", inline: "sudo apt-get install -y xfce4 virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11"
-	# Permit anyone to start the GUI
-	config.vm.provision "shell", inline: "sudo sed -i 's/allowed_users=.*$/allowed_users=anybody/' /etc/X11/Xwrapper.config"
-	# Configure VBox guest tools
-	config.vm.provision "shell", inline: "sudo VBoxClient --clipboard"
-	config.vm.provision "shell", inline: "sudo VBoxClient --draganddrop"
-	config.vm.provision "shell", inline: "sudo VBoxClient --display"
-	config.vm.provision "shell", inline: "sudo VBoxClient --checkhostversion"
-	config.vm.provision "shell", inline: "sudo VBoxClient --seamless"
+      # Display the VirtualBox GUI when booting the machine
+      vb.gui = true
+    end
+    
+    # Install xfce and virtualbox additions
+    config.vm.provision "shell", inline: "sudo apt-get install -y xfce4 virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11"
+    # Permit anyone to start the GUI
+    config.vm.provision "shell", inline: "sudo sed -i 's/allowed_users=.*$/allowed_users=anybody/' /etc/X11/Xwrapper.config"
+    # Configure VBox guest tools
+    config.vm.provision "shell", inline: "sudo VBoxClient --clipboard"
+    config.vm.provision "shell", inline: "sudo VBoxClient --draganddrop"
+    config.vm.provision "shell", inline: "sudo VBoxClient --display"
+    config.vm.provision "shell", inline: "sudo VBoxClient --checkhostversion"
+    config.vm.provision "shell", inline: "sudo VBoxClient --seamless"
   end
 end

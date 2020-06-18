@@ -8,8 +8,6 @@
 # Vagrant stuff
 acceptance_config.yml
 boxes/*
-/.vagrant
-/website/.vagrant
+.vagrant/
 /website/build
 /vagrant-spec.config.rb
-test/vagrant-spec/.vagrant/
