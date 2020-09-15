@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+code --folder-uri "vscode-remote://ssh-remote+eoepca-dev-vm/home/vagrant/eoepca"
+
