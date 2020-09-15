@@ -7,7 +7,7 @@ BIN_DIR="$(pwd)"
 trap "cd '${ORIG_DIR}'" EXIT
 
 function install_docker() {
-  if docker -v >/dev/null 2>&1
+  if hash docker 2>/dev/null
   then
     echo Docker already installed. Skipping...
   else
@@ -18,7 +18,7 @@ function install_docker() {
 }
 
 function install_pip() {
-  if pip -V >/dev/null 2>&1
+  if hash pip 2>/dev/null
   then
     echo pip already installed. Skipping...
   else
@@ -28,7 +28,7 @@ function install_pip() {
 }
 
 function install_jq() {
-  if jq --version >/dev/null 2>&1
+  if hash jq 2>/dev/null
   then
     echo jq already installed. Skipping...
   else
@@ -38,8 +38,7 @@ function install_jq() {
 }
 
 function main() {
-  mkdir -p /home/vagrant/.local/bin
-  chown -R vagrant:vagrant /home/vagrant/.local
+  mkdir -p $HOME/.local/bin
   install_docker
   install_pip
   install_jq
